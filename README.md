@@ -1,5 +1,5 @@
 # ProgrammingAssignment-Course3-Week4
-##Datasets and files for Course 3, Week 4 programming assignment
+## Datasets and files for Course 3, Week 4 programming assignment
 
 The run_analysis.r function will read in 8 different tables of measurement data.  Each row of data, across the tables, contains a subject that is performing an activity, along with the associated measurements taken for the subject/activity combination.  A subject can perform the same activity multiple times resulting in multiple rows of data for that subject and activity combination.  The subjects performing the activities were split into a 'test' group and a 'train'-ing group.  Thus there are 3 tables for each group:
 1. List of the subject performing the activity for each row of table data.  There are 1-30 subjects possible.
