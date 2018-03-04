@@ -28,12 +28,12 @@ run_analysis<-function(){
         
                 fileURLZip<-"https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
         
-                if(!file.exists(zipfilename.zip)){
+                if(!file.exists("zipfilename.zip")){
                         download.file(fileURLZip, destfile="zipfilename.zip")
                 }
                 zippath<-"UCI HAR Dataset"
         
-                 if(!file.exists(zippath)) {
+                 if(!file.exists("zippath")) {
                        unzip("zipfilename.zip")
                 }
 
@@ -108,11 +108,12 @@ run_analysis<-function(){
         # Eliminate the activity value column (column 1)
         
                 FinalCombined<-FinalCombined[,2:69]
-
+               
         # Pt.2:  Write table of Average for each subject, activity combination
 
                 library(gdata)
                 library(reshape2)
+                library(dplyr)
        
         # Convert the table from a wide, to a long table, with variables to be broken out
                 
@@ -144,21 +145,21 @@ run_analysis<-function(){
                 Final1$ag<-gsub("TRUE","Acceleration",Final1$ag)
                 Final1$ag<-gsub("FALSE","Gyroscope",Final1$ag)
 
-                Jerk<-grepl("Jerk",Final7$variable)
-                Final1$jerk<-Jerk
-                Final1$jerk<-gsub("TRUE","Jerk",Final1$jerk)
-                Final1$jerk<-gsub("FALSE","NA",Final1$jerk)
+                Jerk<-grepl("Jerk",Final1$variable)
+                Final1$Jerk<-Jerk
+                Final1$Jerk<-gsub("TRUE","Jerk",Final1$Jerk)
+                Final1$Jerk<-gsub("FALSE","NA",Final1$Jerk)
 
                 Mag<-grepl("Magnitude",Final1$variable)
-                Final1$mag<-Mag
-                Final1$mag<-gsub("TRUE","Magnitude",Final1$mag)
-                Final1$mag<-gsub("FALSE","NA",Final1$mag)
+                Final1$Mag<-Mag
+                Final1$Mag<-gsub("TRUE","Magnitude",Final1$Mag)
+                Final1$Mag<-gsub("FALSE","NA",Final1$Mag)
 
                 MSD<-grepl("-Mean",Final1$variable)
                 Final1$msd<-MSD
                 Final1$msd<-gsub("TRUE","Mean",Final1$msd)
                 Final1$msd<-gsub("FALSE","Standard Deviation",Final1$msd)
-  
+                
         # To populate the variable with 3 values (eg. XYZ Dimension), first locate values that match each, and create separate
         # logical vectors to identify where there are matches. The substitue, within each vector, wherever there is a match (eg True)
         # with the number 1.  Combine the 3 vectors into a matrix of 3 columns.  Wherever there is a false, replace with 0.
@@ -169,8 +170,8 @@ run_analysis<-function(){
                 ZDim<-grepl("-Z",Final1$variable)
 
                 XDim<-gsub("TRUE",1,XDim)
-                YDim<-gsub("TRUE",1,YDim)
-                ZDim<-gsub("TRUE",1,ZDim)
+                YDim<-gsub("TRUE",2,YDim)
+                ZDim<-gsub("TRUE",3,ZDim)
 
                 xyz<-matrix(c(XDim,YDim,ZDim),ncol=3)
                 xyz<-gsub("FALSE",0,xyz)
@@ -179,18 +180,19 @@ run_analysis<-function(){
 
                 XYZDim<-gsub(1,"X",XYZDim)
                 XYZDim<-gsub(2,"Y",XYZDim)
-                XYZDim<-gsub(3,"Z",XYZDim)
-
+                XYZDim<<-gsub(3,"Z",XYZDim)
+                XYZDim<<-gsub(0," ",XYZDim)
+               
         # Combine the last variable column (eg. XYZ) to the overall dataset
                 
-                Final1<-cbind(Final1,XYZDim)
-
-        # Remove the 3rd column (eg.initial combined feature names, that have now been broken out
-                
+                Final1<<-cbind(Final1,XYZDim)
                 Final2<-Final1[,-3]
+                
+                colnames(Final2)<-c("Activity","Subject","Measurement","Time Freq Domain",
+                                    "Body Gravity","Acceleration Gyroscope","Jerk","Mag","Mean StdDev","XYZ Dimension")
                 
         # Group the dataset by Subject and Activity, and take the mean - Write the table to a new file.
                 
-                Averages<-Final2 %>% group_by(Subject,Activity) %>% summarise(Mean=mean(value))
+                Averages<<-Final2 %>% group_by(Subject,Activity) %>% summarise(Mean=mean(Measurement))
                 write.table(Averages,file="TableofAverages.txt")
 }
