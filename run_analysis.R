@@ -180,15 +180,15 @@ run_analysis<-function(){
 
                 XYZDim<-gsub(1,"X",XYZDim)
                 XYZDim<-gsub(2,"Y",XYZDim)
-                XYZDim<<-gsub(3,"Z",XYZDim)
-                XYZDim<<-gsub(0," ",XYZDim)
+                XYZDim<-gsub(3,"Z",XYZDim)
+                XYZDim<-gsub(0," ",XYZDim)
                
         # Combine the last variable column (eg. XYZ) to the overall dataset
                 
-                Final1<<-cbind(Final1,XYZDim)
-                Final2<-Final1[,-3]
+                Final1<-cbind(Final1,XYZDim)
+                Final2<<-Final1[,-3]
                 
-                colnames(Final2)<-c("Activity","Subject","Measurement","Time Freq Domain",
+                colnames(Final2)<<-c("Activity","Subject","Measurement","Time Freq Domain",
                                     "Body Gravity","Acceleration Gyroscope","Jerk","Mag","Mean StdDev","XYZ Dimension")
                 
         # Group the dataset by Subject and Activity, and take the mean - Write the table to a new file.
