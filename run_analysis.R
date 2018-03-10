@@ -188,11 +188,11 @@ run_analysis<-function(){
                 Final1<-cbind(Final1,XYZDim)
                 Final2<<-Final1[,-3]
                 
-                colnames(Final2)<<-c("Activity","Subject","Measurement","Time Freq Domain",
-                                    "Body Gravity","Acceleration Gyroscope","Jerk","Mag","Mean StdDev","XYZ Dimension")
+                colnames(Final2)<<-c("Activity","Subject","Measurement","Time_Freq_Domain",
+                                    "Body_Gravity","Acceleration_Gyroscope","Jerk","Mag","Mean_StdDev","XYZ_Dimension")
                 
         # Group the dataset by Subject and Activity, and take the mean - Write the table to a new file.
                 
-                Averages<<-Final2 %>% group_by(Subject,Activity) %>% summarise(Mean=mean(Measurement))
+                Averages<<-Final2 %>% group_by(Subject,Activity,Time_Freq_Domain, Body_Gravity,Acceleration_Gyroscope, Jerk,Mag,Mean_StdDev,XYZ_Dimension) %>% summarise(Mean=mean(Measurement))
                 write.table(Averages,file="TableofAverages.txt")
 }
