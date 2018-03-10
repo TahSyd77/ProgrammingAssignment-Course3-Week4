@@ -7,6 +7,7 @@
 2. Features.txt
     2 variables (the feature id, and feature/measurement name)
     These features/measurements are used within the X_test.txt and X_train.txt input files.
+    The pertinent measurements are described in Features_Info.txt.
 3.  X_test.txt
     561 measurement variables defined in Features.txt above - 2947 obs
     These are for the test group.
